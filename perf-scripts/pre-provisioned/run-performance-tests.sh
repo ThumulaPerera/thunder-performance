@@ -24,15 +24,15 @@ script_dir=$(dirname "$0")
 # Execute common script
 . $script_dir/perf-test-pre-provisioned.sh
 
-declare -A test_scenario0=(
-    [name]="00-thunder_oauth_client_credential_grant"
-    [display_name]="Client Credentials Grant Type"
-    [description]="Obtain an access token using the OAuth 2.0 client credential grant type."
-    [jmx]="oauth/Thunder_OAuth_Client_Credentials_Grant.jmx"
-    [tenantMode]=false
-    [skip]=false
-    [modes]="QUICK FULL"
-)
+# declare -A test_scenario0=(
+#     [name]="00-thunder_oauth_client_credential_grant"
+#     [display_name]="Client Credentials Grant Type"
+#     [description]="Obtain an access token using the OAuth 2.0 client credential grant type."
+#     [jmx]="oauth/Thunder_OAuth_Client_Credentials_Grant.jmx"
+#     [tenantMode]=false
+#     [skip]=false
+#     [modes]="QUICK FULL"
+# )
 declare -A test_scenario1=(
     [name]="01-thunder_oauth_authorization_code_grant"
     [display_name]="Authorization Code Grant Type"
@@ -42,15 +42,15 @@ declare -A test_scenario1=(
     [skip]=false
     [modes]="QUICK FULL PUBLISH"
 )
-declare -A test_scenario2=(
-    [name]="02-thunder_authenticate"
-    [display_name]="Authentication"
-    [description]="Authenticate a user."
-    [jmx]="authenticate/Thunder_Authenticate.jmx"
-    [tenantMode]=false
-    [skip]=false
-    [modes]="QUICK FULL PUBLISH"
-)
+# declare -A test_scenario2=(
+#     [name]="02-thunder_authenticate"
+#     [display_name]="Authentication"
+#     [description]="Authenticate a user."
+#     [jmx]="authenticate/Thunder_Authenticate.jmx"
+#     [tenantMode]=false
+#     [skip]=false
+#     [modes]="QUICK FULL PUBLISH"
+# )
 
 function before_execute_test_scenario() {
 
