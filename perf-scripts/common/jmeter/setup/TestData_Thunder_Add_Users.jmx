@@ -6,7 +6,6 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <boolProp name="TestPlan.functional_mode">false</boolProp>
     </TestPlan>
     <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Server Variables">
@@ -24,7 +23,7 @@
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Test Variables" enabled="true">
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Test Variables">
         <collectionProp name="Arguments.arguments">
           <elementProp name="usernamePrefix" elementType="Argument">
             <stringProp name="Argument.name">usernamePrefix</stringProp>
@@ -39,7 +38,7 @@
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments">
           <elementProp name="noOfThreads" elementType="Argument">
             <stringProp name="Argument.name">noOfThreads</stringProp>
@@ -69,7 +68,7 @@
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Create User Schema">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Create User Schema" enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -94,7 +93,7 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-  &quot;name&quot;: &quot;customer&quot;,&#xd;
+  &quot;name&quot;: &quot;defaultuser&quot;,&#xd;
   &quot;schema&quot;: {&#xd;
     &quot;username&quot;: {&#xd;
       &quot;type&quot;: &quot;string&quot;,&#xd;
@@ -103,9 +102,143 @@
     &quot;password&quot;: {&#xd;
       &quot;type&quot;: &quot;string&quot;,&#xd;
       &quot;required&quot;: true&#xd;
+    },&#xd;
+    &quot;email&quot;: {&#xd;
+      &quot;type&quot;: &quot;string&quot;,&#xd;
+      &quot;required&quot;: true&#xd;
+    },&#xd;
+    &quot;firstname&quot;: {&#xd;
+      &quot;type&quot;: &quot;string&quot;&#xd;
+    },&#xd;
+    &quot;lastname&quot;: {&#xd;
+      &quot;type&quot;: &quot;string&quot;&#xd;
+    },&#xd;
+    &quot;dateOfBirth&quot;: {&#xd;
+      &quot;type&quot;: &quot;string&quot;&#xd;
+    },&#xd;
+    &quot;gender&quot;: {&#xd;
+      &quot;type&quot;: &quot;string&quot;&#xd;
+    },&#xd;
+    &quot;phoneNumber&quot;: {&#xd;
+      &quot;type&quot;: &quot;string&quot;&#xd;
+    },&#xd;
+    &quot;isActive&quot;: {&#xd;
+      &quot;type&quot;: &quot;boolean&quot;,&#xd;
+      &quot;required&quot;: true&#xd;
+    },&#xd;
+    &quot;createdAt&quot;: {&#xd;
+      &quot;type&quot;: &quot;string&quot;&#xd;
+    },&#xd;
+    &quot;updatedAt&quot;: {&#xd;
+      &quot;type&quot;: &quot;string&quot;&#xd;
+    },&#xd;
+    &quot;lastLogin&quot;: {&#xd;
+      &quot;type&quot;: &quot;string&quot;&#xd;
+    },&#xd;
+    &quot;profile&quot;: {&#xd;
+      &quot;type&quot;: &quot;object&quot;,&#xd;
+      &quot;properties&quot;: {&#xd;
+        &quot;avatarUrl&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;bio&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;website&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;socialLinks&quot;: {&#xd;
+          &quot;type&quot;: &quot;object&quot;,&#xd;
+          &quot;properties&quot;: {&#xd;
+            &quot;linkedin&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+            &quot;twitter&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+            &quot;github&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+            &quot;facebook&quot;: { &quot;type&quot;: &quot;string&quot; }&#xd;
+          }&#xd;
+        }&#xd;
+      }&#xd;
+    },&#xd;
+    &quot;address&quot;: {&#xd;
+      &quot;type&quot;: &quot;object&quot;,&#xd;
+      &quot;properties&quot;: {&#xd;
+        &quot;street&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;city&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;state&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;country&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;postalCode&quot;: { &quot;type&quot;: &quot;string&quot; }&#xd;
+      }&#xd;
+    },&#xd;
+    &quot;preferences&quot;: {&#xd;
+      &quot;type&quot;: &quot;object&quot;,&#xd;
+      &quot;properties&quot;: {&#xd;
+        &quot;language&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;theme&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;notifications&quot;: {&#xd;
+          &quot;type&quot;: &quot;object&quot;,&#xd;
+          &quot;properties&quot;: {&#xd;
+            &quot;email&quot;: { &quot;type&quot;: &quot;boolean&quot; },&#xd;
+            &quot;sms&quot;: { &quot;type&quot;: &quot;boolean&quot; },&#xd;
+            &quot;push&quot;: { &quot;type&quot;: &quot;boolean&quot; }&#xd;
+          }&#xd;
+        }&#xd;
+      }&#xd;
+    },&#xd;
+    &quot;security&quot;: {&#xd;
+      &quot;type&quot;: &quot;object&quot;,&#xd;
+      &quot;properties&quot;: {&#xd;
+        &quot;twoFactorEnabled&quot;: { &quot;type&quot;: &quot;boolean&quot; },&#xd;
+        &quot;loginAttempts&quot;: { &quot;type&quot;: &quot;number&quot; },&#xd;
+        &quot;lastPasswordChange&quot;: { &quot;type&quot;: &quot;string&quot; }&#xd;
+      }&#xd;
+    },&#xd;
+    &quot;subscription&quot;: {&#xd;
+      &quot;type&quot;: &quot;object&quot;,&#xd;
+      &quot;properties&quot;: {&#xd;
+        &quot;plan&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;status&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;renewalDate&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;paymentMethod&quot;: {&#xd;
+          &quot;type&quot;: &quot;object&quot;,&#xd;
+          &quot;properties&quot;: {&#xd;
+            &quot;type&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+            &quot;last4Digits&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+            &quot;billingAddress&quot;: {&#xd;
+              &quot;type&quot;: &quot;object&quot;,&#xd;
+              &quot;properties&quot;: {&#xd;
+                &quot;street&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+                &quot;city&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+                &quot;country&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+                &quot;postalCode&quot;: { &quot;type&quot;: &quot;string&quot; }&#xd;
+              }&#xd;
+            }&#xd;
+          }&#xd;
+        }&#xd;
+      }&#xd;
+    },&#xd;
+    &quot;employment&quot;: {&#xd;
+      &quot;type&quot;: &quot;object&quot;,&#xd;
+      &quot;properties&quot;: {&#xd;
+        &quot;company&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;role&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;startDate&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;endDate&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;employmentType&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;department&quot;: { &quot;type&quot;: &quot;string&quot; }&#xd;
+      }&#xd;
+    },&#xd;
+    &quot;partnerProfile&quot;: {&#xd;
+      &quot;type&quot;: &quot;object&quot;,&#xd;
+      &quot;properties&quot;: {&#xd;
+        &quot;firstname&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;lastname&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;email&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;company&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;role&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;partnershipType&quot;: { &quot;type&quot;: &quot;string&quot; },&#xd;
+        &quot;phoneNumber&quot;: { &quot;type&quot;: &quot;string&quot; }&#xd;
+      }&#xd;
+    },&#xd;
+    &quot;metadata&quot;: {&#xd;
+      &quot;type&quot;: &quot;object&quot;,&#xd;
+      &quot;properties&quot;: {}&#xd;
     }&#xd;
   }&#xd;
-}</stringProp>
+}&#xd;
+</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -135,7 +268,7 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="User Counter" enabled="true">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="User Counter">
           <stringProp name="CounterConfig.start">1</stringProp>
           <stringProp name="CounterConfig.end">${noOfUsers}</stringProp>
           <stringProp name="CounterConfig.incr">1</stringProp>
@@ -176,7 +309,7 @@ if (y == 0) {
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1-Initiate Register User" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1-Initiate Register User">
           <stringProp name="HTTPSampler.domain">${thunder_host}</stringProp>
           <stringProp name="HTTPSampler.port">${thunder_port}</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
@@ -190,12 +323,87 @@ if (y == 0) {
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-  &quot;organizationUnit&quot;: &quot;456e8400-e29b-41d4-a716-446655440001&quot;,&#xd;
-  &quot;type&quot;: &quot;customer&quot;,&#xd;
-  &quot;attributes&quot;: {&#xd;
-    &quot;username&quot;: &quot;${usernamePrefix}${user_count_id}&quot;,&#xd;
-    &quot;password&quot;: &quot;${password}&quot;&#xd;
-  }&#xd;
+    &quot;organizationUnit&quot;: &quot;456e8400-e29b-41d4-a716-446655440001&quot;,&#xd;
+    &quot;type&quot;: &quot;defaultuser&quot;,&#xd;
+    &quot;attributes&quot;: {&#xd;
+        &quot;username&quot;: &quot;${usernamePrefix}${user_count_id}&quot;,&#xd;
+        &quot;password&quot;: &quot;${password}&quot;,&#xd;
+        &quot;email&quot;: &quot;john.doe@example.com&quot;,&#xd;
+        &quot;firstname&quot;: &quot;John&quot;,&#xd;
+        &quot;lastname&quot;: &quot;Doe&quot;,&#xd;
+        &quot;dateOfBirth&quot;: &quot;1990-05-14&quot;,&#xd;
+        &quot;gender&quot;: &quot;male&quot;,&#xd;
+        &quot;phoneNumber&quot;: &quot;+1-202-555-0147&quot;,&#xd;
+        &quot;isActive&quot;: true,&#xd;
+        &quot;createdAt&quot;: &quot;2025-10-14T08:30:00Z&quot;,&#xd;
+        &quot;updatedAt&quot;: &quot;2025-10-14T08:30:00Z&quot;,&#xd;
+        &quot;lastLogin&quot;: &quot;2025-10-14T09:00:00Z&quot;,&#xd;
+        &quot;profile&quot;: {&#xd;
+            &quot;avatarUrl&quot;: &quot;https://example.com/avatars/johndoe.jpg&quot;,&#xd;
+            &quot;bio&quot;: &quot;Software engineer passionate about distributed systems and open source.&quot;,&#xd;
+            &quot;website&quot;: &quot;https://johndoe.dev&quot;,&#xd;
+            &quot;socialLinks&quot;: {&#xd;
+                &quot;linkedin&quot;: &quot;https://linkedin.com/in/johndoe&quot;,&#xd;
+                &quot;twitter&quot;: &quot;https://twitter.com/johndoe&quot;,&#xd;
+                &quot;github&quot;: &quot;https://github.com/johndoe&quot;,&#xd;
+                &quot;facebook&quot;: &quot;https://facebook.com/johndoe&quot;&#xd;
+            }&#xd;
+        },&#xd;
+        &quot;address&quot;: {&#xd;
+            &quot;street&quot;: &quot;123 Main Street&quot;,&#xd;
+            &quot;city&quot;: &quot;New York&quot;,&#xd;
+            &quot;state&quot;: &quot;NY&quot;,&#xd;
+            &quot;country&quot;: &quot;USA&quot;,&#xd;
+            &quot;postalCode&quot;: &quot;10001&quot;&#xd;
+        },&#xd;
+        &quot;preferences&quot;: {&#xd;
+            &quot;language&quot;: &quot;en&quot;,&#xd;
+            &quot;theme&quot;: &quot;dark&quot;,&#xd;
+            &quot;notifications&quot;: {&#xd;
+                &quot;email&quot;: true,&#xd;
+                &quot;sms&quot;: false,&#xd;
+                &quot;push&quot;: true&#xd;
+            }&#xd;
+        },&#xd;
+        &quot;security&quot;: {&#xd;
+            &quot;twoFactorEnabled&quot;: true,&#xd;
+            &quot;loginAttempts&quot;: 1,&#xd;
+            &quot;lastPasswordChange&quot;: &quot;2025-09-20T10:15:00Z&quot;&#xd;
+        },&#xd;
+        &quot;subscription&quot;: {&#xd;
+            &quot;plan&quot;: &quot;premium&quot;,&#xd;
+            &quot;status&quot;: &quot;active&quot;,&#xd;
+            &quot;renewalDate&quot;: &quot;2026-10-14T00:00:00Z&quot;,&#xd;
+            &quot;paymentMethod&quot;: {&#xd;
+                &quot;type&quot;: &quot;credit_card&quot;,&#xd;
+                &quot;last4Digits&quot;: &quot;4242&quot;,&#xd;
+                &quot;billingAddress&quot;: {&#xd;
+                    &quot;street&quot;: &quot;456 Market Street&quot;,&#xd;
+                    &quot;city&quot;: &quot;San Francisco&quot;,&#xd;
+                    &quot;country&quot;: &quot;USA&quot;,&#xd;
+                    &quot;postalCode&quot;: &quot;94105&quot;&#xd;
+                }&#xd;
+            }&#xd;
+        },&#xd;
+        &quot;employment&quot;: {&#xd;
+            &quot;company&quot;: &quot;TechNova Inc.&quot;,&#xd;
+            &quot;role&quot;: &quot;Senior Software Engineer&quot;,&#xd;
+            &quot;startDate&quot;: &quot;2021-03-01&quot;,&#xd;
+            &quot;endDate&quot;: &quot;&quot;,&#xd;
+            &quot;employmentType&quot;: &quot;full-time&quot;,&#xd;
+            &quot;department&quot;: &quot;Engineering&quot;&#xd;
+        },&#xd;
+        &quot;partnerProfile&quot;: {&#xd;
+            &quot;firstname&quot;: &quot;Jane&quot;,&#xd;
+            &quot;lastname&quot;: &quot;Smith&quot;,&#xd;
+            &quot;email&quot;: &quot;jane.smith@partnerco.com&quot;,&#xd;
+            &quot;company&quot;: &quot;PartnerCo&quot;,&#xd;
+            &quot;role&quot;: &quot;Business Development Manager&quot;,&#xd;
+            &quot;partnershipType&quot;: &quot;strategic&quot;,&#xd;
+            &quot;phoneNumber&quot;: &quot;+1-202-555-0182&quot;&#xd;
+        },&#xd;
+        &quot;metadata&quot;: {}&#xd;
+    }&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -215,6 +423,43 @@ if (y == 0) {
           <hashTree/>
         </hashTree>
       </hashTree>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>
