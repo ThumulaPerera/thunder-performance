@@ -79,7 +79,7 @@ function exit_handler() {
 
 function ssh_bastion_cmd() {
 
-    local ssh_command="ssh -i $key_file -o "StrictHostKeyChecking=no" -t ubuntu@$bastion_node_ip $1"
+    local ssh_command="ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=20 -i $key_file -o "StrictHostKeyChecking=no" -t ubuntu@$bastion_node_ip $1"
     echo "$ssh_command"
     $ssh_command || echo "Remote ssh command failed."
 }
