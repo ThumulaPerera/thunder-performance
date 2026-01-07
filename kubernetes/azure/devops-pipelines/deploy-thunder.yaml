@@ -94,7 +94,7 @@ resources:
       type: github
       endpoint: asgardeo
       name: $(THUNDER_REPO)
-      ref: $(THUNDER_REPO_BRANCH)
+      ref: refs/tags/v0.8.0
     - repository: thunder-performance
       type: github
       endpoint: asgardeo
