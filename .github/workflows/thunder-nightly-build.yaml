@@ -1,0 +1,46 @@
+name: Thunder Nightly Build
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout asgardeo/thunder
+        uses: actions/checkout@v4
+        with:
+          repository: asgardeo/thunder
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+
+      - name: Build Backend
+        run: |
+          make build_backend
+          mv target/dist/*.zip target/dist/thunder-nightly.zip
+
+      - name: Create Nightly Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Nightly Build
+          tag_name: nightly
+          files: target/dist/thunder-nightly.zip
+          prerelease: true
+          make_latest: true
+
+      - name: Trigger VM Performance Workflow
+        env:
+          GH_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+        run: |
+          gh workflow run vm-perf-workflow.yml \
+            -f THUNDER_PACK_URL=https://github.com/${{ github.repository }}/releases/download/nightly/thunder-nightly.zip
