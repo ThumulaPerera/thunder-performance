@@ -80,6 +80,4 @@ jwt:
 
 crypto:
   password_hashing:
-    algorithm: "PBKDF2"
-    pbkdf2:
-      iterations: 10000
+    algorithm: "ARGON2ID"
