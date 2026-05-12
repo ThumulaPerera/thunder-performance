@@ -76,10 +76,3 @@ cache:
 
 jwt:
   issuer: "thunder"
-
-
-crypto:
-  password_hashing:
-    algorithm: "PBKDF2"
-    pbkdf2:
-      iterations: 10000
