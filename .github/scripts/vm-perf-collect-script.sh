@@ -1,0 +1,135 @@
+#!/bin/bash
+# Copyright (c) 2026, WSO2 LLC. (https://www.wso2.com).
+#
+# WSO2 LLC. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+# ----------------------------------------------------------------------------
+# Download results.zip from the bastion via rsync (resumable + verified) and
+# generate summary artifacts (summary.csv, summary.md).
+#
+# Required env:
+#   WORKSPACE            - GHA workspace (used to locate perf-scripts tree).
+#   DEPLOYMENT           - e.g. single-node.
+#   BASTION_IP           - bastion public IP.
+#   KEY_FILE             - path to PEM.
+#   MANIFEST_DIR         - path to the downloaded manifest artifact directory
+#                          (contains manifest.json + cf-test-metadata.json).
+#   RESULTS_DIR_NAME     - name of the results-* dir to create (must start with "results-"
+#                          to match downstream glob patterns).
+#
+# The rsync retry loop handles multi-GB transfers over unstable networks:
+#   --partial            keep partial file on failure for the next attempt to resume from
+#   --append-verify      resume by appending, then verify the whole file end-to-end
+#   --timeout=180        fail an idle rsync within 3min so the retry can kick in
+#   -e "ssh ..."         controls the ssh transport (keepalives, connect timeout)
+# 3 attempts with exponential backoff. Resume + verify means each retry only
+# re-transfers what wasn't already delivered.
+# ----------------------------------------------------------------------------
+
+set -euo pipefail
+
+: "${WORKSPACE:?WORKSPACE must be set}"
+: "${DEPLOYMENT:?DEPLOYMENT must be set}"
+: "${BASTION_IP:?BASTION_IP must be set}"
+: "${KEY_FILE:?KEY_FILE must be set}"
+: "${MANIFEST_DIR:?MANIFEST_DIR must be set}"
+: "${RESULTS_DIR_NAME:?RESULTS_DIR_NAME must be set}"
+
+DEPLOYMENT_DIR="$WORKSPACE/perf-scripts/$DEPLOYMENT"
+RESULTS_DIR="$DEPLOYMENT_DIR/$RESULTS_DIR_NAME"
+
+echo "Preparing results directory: $RESULTS_DIR"
+mkdir -p "$RESULTS_DIR"
+
+echo ""
+echo "Copying CF test metadata into results directory..."
+if [[ ! -f "$MANIFEST_DIR/cf-test-metadata.json" ]]; then
+    echo "ERROR: cf-test-metadata.json not present in manifest artifact." >&2
+    exit 1
+fi
+cp "$MANIFEST_DIR/cf-test-metadata.json" "$RESULTS_DIR/cf-test-metadata.json"
+
+echo ""
+echo "Extracting Thunder Performance Distribution into $RESULTS_DIR"
+tar -xf "$DEPLOYMENT_DIR"/target/performance-thunder-singlenode-*.tar.gz -C "$RESULTS_DIR"
+
+# ---------------------------------------------------------------------------
+# Download results.zip from bastion — resumable + verified, with retry
+# ---------------------------------------------------------------------------
+echo ""
+echo "Downloading results.zip from bastion via rsync..."
+echo "  source: ubuntu@${BASTION_IP}:/home/ubuntu/results.zip"
+echo "  target: ${RESULTS_DIR}/results.zip"
+
+ssh_transport="ssh -i \"$KEY_FILE\" -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -o ServerAliveCountMax=8 -o ConnectTimeout=30"
+
+download_ok=0
+for attempt in 1 2 3; do
+    echo ""
+    echo "rsync attempt $attempt/3..."
+    if rsync -avP --partial --append-verify --timeout=180 \
+        -e "$ssh_transport" \
+        "ubuntu@${BASTION_IP}:/home/ubuntu/results.zip" \
+        "$RESULTS_DIR/results.zip"; then
+        echo "rsync succeeded on attempt $attempt."
+        download_ok=1
+        break
+    fi
+    echo "rsync attempt $attempt failed (exit $?)."
+    if [[ $attempt -lt 3 ]]; then
+        backoff=$((attempt * 30))
+        echo "Backing off ${backoff}s before retry..."
+        sleep "$backoff"
+    fi
+done
+
+if [[ $download_ok -ne 1 ]]; then
+    echo "ERROR: rsync failed after 3 attempts." >&2
+    exit 1
+fi
+
+if [[ ! -f "$RESULTS_DIR/results.zip" ]]; then
+    echo "ERROR: results.zip not present after rsync (unexpected)." >&2
+    exit 1
+fi
+
+result_size=$(stat -c %s "$RESULTS_DIR/results.zip")
+echo "Downloaded results.zip: $result_size bytes"
+
+# ---------------------------------------------------------------------------
+# Extract results and generate summary artifacts
+# ---------------------------------------------------------------------------
+echo ""
+echo "Creating summary.csv..."
+echo "============================================"
+cd "$RESULTS_DIR"
+unzip -q results.zip
+wget -q http://sourceforge.net/projects/gcviewer/files/gcviewer-1.35.jar/download -O gcviewer.jar
+
+"$RESULTS_DIR"/jmeter/create-summary-csv.sh -d results -n "WSO2 Thunder" -p wso2thunder -c "Heap Size" \
+    -c "Concurrent Users" -r "([0-9]+[a-zA-Z])_heap" -r "([0-9]+)_users" -i -l -k 1 -g gcviewer.jar
+
+echo ""
+echo "Creating summary results markdown file..."
+./jmeter/create-summary-markdown.py --json-files cf-test-metadata.json results/test-metadata.json --column-names \
+    "Concurrent Users" "95th Percentile of Response Time (ms)"
+
+# Cleanup intermediate files — matches start-performance.sh's tail behavior so that
+# the uploaded artifact structure is consistent with the current single-workflow flow.
+rm -rf cf-test-metadata.json cloudformation/ common/ gcviewer.jar is/ jmeter/ jtl-splitter/ netty-service/ payloads/ sar/ setup/ results/ thunder/restart-thunder.sh summary/
+
+echo ""
+echo "Collect script complete."
+echo "============================================"
