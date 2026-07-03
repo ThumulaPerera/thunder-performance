@@ -328,8 +328,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: manifest-${{ github.run_number }}
-          path: ${{ github.workspace }}/manifest.json
+          # cf-test-metadata.json is written by create-cf-stack.sh; collect uses it
+          # in create-summary-markdown.py to render instance types in the report.
+          path: |
+            ${{ github.workspace }}/manifest.json
+            ${{ github.workspace }}/cf-test-metadata.json
           retention-days: 90
+          if-no-files-found: error
 
       - name: Publish trigger summary
         env:
@@ -359,6 +364,18 @@ jobs:
             echo "> AWS resources are still running. Tear them down manually when the test is done — see **Cleanup** below."
             echo ">"
             echo "> Cancelling THIS workflow does NOT stop the running test. To stop the test early, see **Cancel test early** below."
+            echo ""
+            echo "### When the test finishes"
+            echo ""
+            echo "**Automated (recommended)** — one command retrieves results, generates the summary, tears down the CloudFormation stack, and uploads GHA artifacts:"
+            echo ""
+            echo '```bash'
+            echo "gh workflow run vm-perf-collect.yml -f TRIGGER_RUN_NUMBER=${RUN_NUMBER}"
+            echo '```'
+            echo ""
+            echo "You can also click **Actions → VM Performance Test - Collect Results → Run workflow** and paste \`${RUN_NUMBER}\` as the trigger run number."
+            echo ""
+            echo "**Manual** — do it by hand (see the sections below for the individual steps: retrieve results, view metrics, tear down stack)."
             echo ""
             echo "### Test handles"
             echo ""
@@ -406,7 +423,9 @@ jobs:
             echo ""
             echo "If \`process: DEAD\` and \`run.log\` hasn't been touched in >5 min, the test crashed. Retrieve \`run.log\` for diagnosis, then tear down the stack."
             echo ""
-            echo "### Retrieve results when done"
+            echo "### Retrieve results when done (manual)"
+            echo ""
+            echo "For the automated flow see **When the test finishes** above."
             echo ""
             echo '```bash'
             echo "scp -i ./key.pem ubuntu@${BASTION_IP}:/home/ubuntu/results.zip ."
@@ -425,7 +444,9 @@ jobs:
             echo ""
             echo "Then follow **Cleanup** below to delete the stack."
             echo ""
-            echo "### Cleanup"
+            echo "### Cleanup (manual)"
+            echo ""
+            echo "The automated \`vm-perf-collect.yml\` workflow tears down the stack for you (with \`if: always()\`). Only use these commands if you're doing a manual flow."
             echo ""
             echo "**Option 1 — AWS Console:** [CloudFormation → ${stack_name}](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/stackinfo?stackId=${stack_name}) → Delete"
             echo ""
