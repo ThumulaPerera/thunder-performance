@@ -231,6 +231,20 @@ echo ""
 echo "Running performance tests..."
 echo "============================================"
 scp_bastion_cmd "run-performance-tests.sh" "/home/ubuntu/workspace/jmeter"
+
+# Detached mode: launch JMeter in background on the bastion and exit early.
+# When DETACHED_RUN is unset, the script continues on the existing synchronous path below.
+if [[ -n "${DETACHED_RUN:-}" ]]; then
+    echo ""
+    echo "Detached mode: launching JMeter in background on the bastion..."
+    echo "============================================"
+    ssh -i "$key_file" -o StrictHostKeyChecking=no -o ConnectTimeout=30 \
+        ubuntu@"$bastion_node_ip" \
+        "chmod +x /home/ubuntu/workspace/jmeter/run-performance-tests.sh && nohup /home/ubuntu/workspace/jmeter/run-performance-tests.sh -p 443 ${run_performance_tests_options[*]} </dev/null >/home/ubuntu/run.log 2>&1 &"
+    echo "Detached run launched. Skipping foreground JMeter execution and result collection."
+    exit 0
+fi
+
 ssh_bastion_cmd "./workspace/jmeter/run-performance-tests.sh -p 443 ${run_performance_tests_options[*]}"
 
 echo ""
