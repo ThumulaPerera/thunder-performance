@@ -116,7 +116,10 @@ echo "-------------------------------------------"
 cd "$carbon_home"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 LOG_FILE="thunder_${TIMESTAMP}.log"
-SKIP_SECURITY=true bash start.sh > "$LOG_FILE" 2>&1 &
+# Default resources (admin user, default OU, Console app) are seeded in-process by
+# setup.sh above. Perf test data is seeded with an admin token (see get_admin_token
+# in perf-test-thunder.sh).
+bash start.sh > "$LOG_FILE" 2>&1 &
 cd "../"
 echo "Waiting 30s for Thunder server to start..."
 sleep 30s
