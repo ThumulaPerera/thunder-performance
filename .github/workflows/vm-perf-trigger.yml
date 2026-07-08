@@ -17,7 +17,7 @@ on:
       THUNDER_PACK_URL:
         description: 'URL to download Thunder pack'
         required: true
-        default: 'https://github.com/asgardeo/thunder/releases/download/v0.7.0/thunder-v0.7.0-linux-x64.zip'
+        default: 'https://github.com/thunder-id/thunderid/releases/download/v0.47.0/thunderid-0.47.0-linux-x64.zip'
         type: string
       DEPLOYMENT:
         description: 'Deployment type'
