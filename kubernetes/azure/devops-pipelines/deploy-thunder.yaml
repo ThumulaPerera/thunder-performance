@@ -70,7 +70,7 @@ parameters:
   - name: THUNDER_IMAGE_TAG
     displayName: Thunder Image Tag
     type: string
-    default: "0.38.0"
+    default: "0.47.0"
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -140,7 +140,6 @@ jobs:
           THUNDER_IMAGE_REGISTRY: ${{ parameters.THUNDER_IMAGE_REGISTRY }}
           THUNDER_IMAGE_REPOSITORY: ${{ parameters.THUNDER_IMAGE_REPOSITORY }}
           THUNDER_IMAGE_TAG: ${{ parameters.THUNDER_IMAGE_TAG }}
-          SKIP_SECURITY: 'true'
 
   - job: add_hosts_entry_to_vm
     displayName: Add Hosts Entry to VM
