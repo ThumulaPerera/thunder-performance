@@ -133,6 +133,25 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
+        <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="DEBUG Log admin flow response" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">String label = prev.getSampleLabel();
+boolean ok = prev.isSuccessful();
+String rc = prev.getResponseCode();
+String rm = prev.getResponseMessage();
+String body = prev.getResponseDataAsString();
+if (body == null) { body = ""; }
+if (body.length() &gt; 4000) { body = body.substring(0, 4000) + " ...[truncated]"; }
+String headers = prev.getResponseHeaders();
+System.out.println("[SETUP-DEBUG] sampler=[" + label + "] success=" + ok + " responseCode=" + rc + " responseMessage=" + rm);
+System.out.println("[SETUP-DEBUG] response-headers: " + headers);
+System.out.println("[SETUP-DEBUG] response-body: " + body);
+log.warn("[SETUP-DEBUG] sampler=[" + label + "] success=" + ok + " responseCode=" + rc + " body=" + body);</stringProp>
+        </JSR223PostProcessor>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1 Send request to authorize endpoint" enabled="true">
           <stringProp name="HTTPSampler.domain">${thunder_host}</stringProp>
           <stringProp name="HTTPSampler.port">${thunder_port}</stringProp>
