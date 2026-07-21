@@ -49,36 +49,36 @@ database:
           max_open_conns: 20
           max_idle_conns: 20
           conn_max_lifetime: 300
-    runtime:
+    runtime_transient:
         type: "postgres"
         postgres:
           hostname: "{db_hostname}"
           port: 5432
-          name: "runtimedb"
+          name: "runtime_transient"
           username: "asgthunder"
           password: "asgthunder"
           sslmode: "disable"
           max_open_conns: 20
           max_idle_conns: 20
           conn_max_lifetime: 300
-    user:
+    entity:
         type: "postgres"
         postgres:
           hostname: "{db_hostname}"
           port: 5432
-          name: "userdb"
+          name: "entitydb"
           username: "asgthunder"
           password: "asgthunder"
           sslmode: "disable"
           max_open_conns: 20
           max_idle_conns: 20
           conn_max_lifetime: 300
-    operation:
+    runtime_persistent:
         type: "postgres"
         postgres:
           hostname: "{db_hostname}"
           port: 5432
-          name: "operationdb"
+          name: "runtime_persistent"
           username: "asgthunder"
           password: "asgthunder"
           sslmode: "disable"
