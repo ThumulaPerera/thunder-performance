@@ -105,6 +105,11 @@
             <stringProp name="Argument.value">${__P(adminScope,system)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="systemResourceIdentifier" elementType="Argument">
+            <stringProp name="Argument.name">systemResourceIdentifier</stringProp>
+            <stringProp name="Argument.value">${__P(systemResourceIdentifier,https://localhost:8090/mcp)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
@@ -196,6 +201,13 @@ log.warn("[SETUP-DEBUG] sampler=[" + label + "] success=" + ok + " responseCode=
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">code_challenge_method</stringProp>
+              </elementProp>
+              <elementProp name="resource" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.value">${systemResourceIdentifier}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">resource</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
@@ -461,6 +473,13 @@ vars.put('code_challenge', challenge)</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">code_verifier</stringProp>
+              </elementProp>
+              <elementProp name="resource" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.value">${systemResourceIdentifier}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">resource</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>

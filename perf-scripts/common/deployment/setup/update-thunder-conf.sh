@@ -104,7 +104,12 @@ echo "-------------------------------------------"
 cd "$carbon_home"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 LOG_FILE="thunder_setup_${TIMESTAMP}.log"
-bash setup.sh > "$LOG_FILE" 2>&1 &
+# Pin the bootstrapped admin credentials (override via ADMIN_USERNAME/ADMIN_PASSWORD env).
+# Since Thunder v1.0.0-alpha, setup.sh generates a random admin password when none is
+# supplied, which breaks the JMeter admin-token seeding flow (it logs in as admin/admin).
+# Keep these in sync with adminUsername/adminPassword in the TestData_Thunder_Add_*.jmx
+# seeding plans.
+ADMIN_USERNAME="${ADMIN_USERNAME:-admin}" ADMIN_PASSWORD="${ADMIN_PASSWORD:-admin}" bash setup.sh > "$LOG_FILE" 2>&1 &
 cd "../"
 echo "Waiting 60s for Thunder server setup to complete..."
 sleep 60s
