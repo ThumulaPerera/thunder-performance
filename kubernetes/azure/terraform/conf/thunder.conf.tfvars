@@ -22,7 +22,7 @@ padding              = "001"
 
 # AKS configuration
 
-kubernetes_version             = "1.33"
+kubernetes_version             = "1.34"
 default_node_pool_vm_size      = "Standard_F8s_v2"
 default_node_pool_count        = 2
 default_node_pool_os_disk_size = 64
